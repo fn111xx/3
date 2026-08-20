@@ -2,14 +2,147 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Untitled Page</title>
-<meta name="generator" content="WYSIWYG Web Builder 21 Trial Version - https://www.wysiwygwebbuilder.com">
-<link href="Untitled1.css" rel="stylesheet">
-<link href="index.css" rel="stylesheet">
+<title>RGS | Fallout RP New-Vegas</title>
+<style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    html, body {
+        width:100%; height:100%;
+        overflow:hidden;
+        background:#0a0806;
+        font-family: Consolas, "Courier New", monospace;
+        color:#ffb642;
+    }
+
+    /* фон на весь экран, любое разрешение */
+    #bg {
+        position:fixed; inset:0;
+        background:url("images/bkjkw9s.png") center center / cover no-repeat;
+    }
+
+    /* затемнение снизу, чтобы текст читался */
+    #vignette {
+        position:fixed; inset:0;
+        background:linear-gradient(to bottom, rgba(0,0,0,.25) 0%, rgba(0,0,0,0) 35%, rgba(0,0,0,.85) 100%);
+    }
+
+    #panel {
+        position:fixed;
+        left:0; right:0; bottom:0;
+        padding:0 6vw 5vh 6vw;
+    }
+
+    #servername {
+        font-size:2.2vw;
+        letter-spacing:.08em;
+        text-transform:uppercase;
+        text-shadow:0 0 12px rgba(255,182,66,.45);
+        margin-bottom:.4vh;
+    }
+
+    #mapname {
+        font-size:1.1vw;
+        color:#8a6a35;
+        letter-spacing:.15em;
+        text-transform:uppercase;
+        margin-bottom:2.2vh;
+    }
+
+    /* полоса прогресса */
+    #track {
+        position:relative;
+        height:14px;
+        background:rgba(255,182,66,.10);
+        border:1px solid rgba(255,182,66,.35);
+    }
+
+    #bar {
+        position:absolute; left:0; top:0; bottom:0;
+        width:0%;
+        background:#ffb642;
+        box-shadow:0 0 14px rgba(255,182,66,.7);
+        transition:width .25s linear;
+    }
+
+    #row {
+        display:flex;
+        justify-content:space-between;
+        align-items:baseline;
+        margin-top:1.2vh;
+        font-size:1vw;
+    }
+
+    #status {
+        color:#c9974a;
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        max-width:80%;
+    }
+
+    #percent { color:#ffb642; }
+
+    /* мигающий курсор у статуса */
+    #caret { animation:blink 1s steps(1) infinite; }
+    @keyframes blink { 50% { opacity:0; } }
+</style>
 </head>
 <body>
-<div id="wb_Image1" style="position:absolute;left:0px;top:0px;width:800px;height:450px;z-index:1;">
-<img src="images/bkjkw9s.png" id="Image1" alt="" width="7700" height="3660"></div>
-<div id="wb_Image4" style="position:absolute;left:311px;top:324px;width:1px;height:1px;z-index:2;">
+
+<div id="bg"></div>
+<div id="vignette"></div>
+
+<div id="panel">
+    <div id="servername">RGS | Fallout RP New-Vegas</div>
+    <div id="mapname">Подключение к серверу</div>
+
+    <div id="track"><div id="bar"></div></div>
+
+    <div id="row">
+        <div id="status">Ожидание ответа сервера<span id="caret">_</span></div>
+        <div id="percent">0%</div>
+    </div>
+</div>
+
+<script>
+var filesTotal = 0;
+
+function setProgress(pct) {
+    pct = Math.max(0, Math.min(100, pct));
+    document.getElementById("bar").style.width = pct + "%";
+    document.getElementById("percent").innerText = Math.floor(pct) + "%";
+}
+
+function setStatus(text) {
+    document.getElementById("status").innerHTML =
+        text + '<span id="caret">_</span>';
+}
+
+/* --- функции, которые вызывает сам GMod --- */
+
+function GameDetails(servername, serverurl, mapname, maxplayers, steamid, gamemode) {
+    if (servername) document.getElementById("servername").innerText = servername;
+    if (mapname)    document.getElementById("mapname").innerText = mapname;
+}
+
+function SetFilesTotal(total) {
+    filesTotal = total;
+}
+
+function SetFilesNeeded(needed) {
+    if (filesTotal > 0) {
+        setProgress(100 - (needed / filesTotal) * 100);
+    }
+}
+
+function DownloadingFile(fileName) {
+    setStatus("Загрузка: " + fileName);
+}
+
+function SetStatusChanged(status) {
+    setStatus(status);
+}
+</script>
+
 </body>
 </html>
