@@ -14,15 +14,17 @@
         color:#ffb642;
     }
 
-    /* фон на весь экран, любое разрешение */
+    /* фон 1920x1080 - на весь экран */
     #bg {
         position:fixed; inset:0;
         background:url("images/bkjkw9s.png") center center / cover no-repeat;
+        z-index:1;
     }
 
     /* затемнение снизу, чтобы текст читался */
     #vignette {
         position:fixed; inset:0;
+        z-index:2;
         background:linear-gradient(to bottom, rgba(0,0,0,.25) 0%, rgba(0,0,0,0) 35%, rgba(0,0,0,.85) 100%);
     }
 
@@ -30,6 +32,7 @@
         position:fixed;
         left:0; right:0; bottom:0;
         padding:0 6vw 5vh 6vw;
+        z-index:3;
     }
 
     #servername {
